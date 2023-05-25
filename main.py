@@ -3,7 +3,15 @@ from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor, Compose, Resize, Normalize
+from pymongo import MongoClient
+from typing import Any, Dict
+from os import getenv
 
+mongo_url = getenv("MONGO_URL")
+
+client: MongoClient[Dict[str, Any]] = MongoClient(mongo_url)
+db = client["mydatabase"]
+collection = db["mymodels"]
 
 transform = Compose(
     [
@@ -120,3 +128,8 @@ print("Done!")
 
 torch.save(model.state_dict(), "model.pth")
 print("Saved PyTorch Model State to model.pth")
+
+with open("model.pth", "rb") as f:
+    model_data = f.read()
+
+collection.insert_one({"model": model_data})
