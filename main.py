@@ -135,4 +135,6 @@ print("Saved PyTorch Model State to model.pth")
 with open("model.pth", "rb") as f:
     model_data = f.read()
 
-collection.insert_one({"model": model_data})
+collection.update_one(
+    {"model": {"$exists": True}}, {"$set": {"model": model_data}}, upsert=True
+)
