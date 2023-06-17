@@ -6,6 +6,9 @@ from torchvision.transforms import ToTensor, Compose, Resize, Normalize
 from pymongo import MongoClient
 from typing import Any, Dict
 from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
 
 mongo_url = getenv("MONGO_URL")
 
